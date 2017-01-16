@@ -1,20 +1,25 @@
 import requests
-from .users import *
-from .messages import *
-from .groups import *
+from .users import User
+from .messages import Message
+from .groups import Group
+
+
 class JMessage(object):
-    def __init__(self,key,secret):
+
+    def __init__(self, key, secret):
         self.key = key
         self.secret = secret
         self.session = requests.Session()
         self.session.auth = (key, secret)
 
-    def _request(self, method, body, request_url, content_type=None, version=None, params=None):
-        headers = {}
+    def request(self, method, body, request_url, params=None):
+        headers = dict()
         headers['user-agent'] = 'jpush-api-python-client'
         headers['connection'] = 'keep-alive'
         headers['content-type'] = 'application/json;charset:utf-8'
-        response = self.session.request(method, request_url,data=body, params=params, headers=headers)
+        response = self.session.request(method, request_url,
+                                        data=body, params=params,
+                                        headers=headers)
         return response
 
     def create_users(self):
